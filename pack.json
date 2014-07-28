@@ -1,0 +1,41 @@
+{	  
+ 	  "name":"spark_utils", 
+ 	 	 
+ 	 "description":"contains standard use sparkflow fbp components (splitters, distributors, ..etc)", 
+ 	 	 
+ 	 "version":"0.0.1", 
+ 	 	 
+ 	 "license":"mit", 
+ 	 	 
+ 	 "install_dir":"./packages", 
+ 	 	 
+ 	 "depends":{ 
+      "ds":{ 
+        "type":"dartpath", 
+       "url":"../ds"
+     }, 
+      "sparkflow":{ 
+        "type":"dartpath", 
+       "url":"../sparkflow"
+     }, 
+    "spark_utils":{ 
+        "type":"dartpath", 
+       "url":"."
+     }, 
+     "streamable":{ 
+        "type":"dartpath", 
+       "url":"../streamable"
+     }, 
+       
+     "guardedfs":{ 
+        "type":"dartpath", 
+       "url":"../guardedfs"
+     }, 
+       
+     "hub":{ 
+        "type":"dartpath", 
+       "url":"../hub"
+         
+     } 
+ 	 } 
+ 	 }

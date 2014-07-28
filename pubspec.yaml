@@ -1,0 +1,12 @@
+name: spark_utils
+version: 0.0.1
+author: Alexander Ewetumo <trinoxf@gmail.com>
+description: utility components for sparkflow
+dependencies:
+  sparkflow: any
+  hub: any
+dependency_overrides:
+  sparkflow:
+     path: ../sparkflow
+  hub:
+     path: ../hub
