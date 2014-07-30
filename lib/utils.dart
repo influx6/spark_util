@@ -2,12 +2,47 @@ library spark_utils;
 
 import 'package:sparkflow/sparkflow.dart';
 import 'package:hub/hub.dart';
+import 'dart:convert';
 
 class SparkUtils{
   static void register(){
 
       Sparkflow.createRegistry('spark.utils',(r){
         
+         r.addMutation('utils/utf8.decode',(e){
+           e.makeInport('io:in');
+           e.makeInport('io:out');
+
+           e.tapData('io:in',(n){
+              var l = n.data is List ? n.data : [n.data];
+              e.send('io:out',UTF8.decode(l));
+           });
+           
+           e.tapEnd('io:in',(n){
+             e.port('io:out').endStream();
+           });
+         });
+
+         r.addMutation('utils/utf8.encode',(e){
+           e.makeInport('io:in');
+           e.makeInport('io:out');
+
+           e.tapData('io:in',(n){
+              var l = n.data is List ? n.data : [n.data];
+              e.send('io:out',UTF8.encode(l));
+           });
+
+           e.tapEnd('io:in',(n){
+             e.port('io:out').endStream();
+           });
+         });
+
+         r.addMutation('utils/repeat',(e){
+           e.makeInport('io:in');
+           e.makeInport('io:out');
+           e.loopPort('io:in','io:out');
+         });
+
          r.addMutation('utils/applyfn',(e){
             e.meta('desc','applies a function to all inputs');
 
