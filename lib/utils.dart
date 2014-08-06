@@ -9,9 +9,48 @@ class SparkUtils{
 
       Sparkflow.createRegistry('spark.utils',(r){
         
+         r.addMutation('utils/alwaysOnce',(e){
+           e.meta('desc','takes a single value once and always sends it to all connected  and connecting outports');
+
+           e.makeInport('io:val');
+           e.makeOutport('io:call');
+
+           e.port('io:call').pause();
+
+           e.tapOnce('io:val',(n){
+              e.sd.update('val',n);
+              e.port('io:call').resume();
+           });
+
+           e.port('io:call').whenSocketSubscribe((n){
+              if(e.port('io:call').isResumed) e.send('io:call').send(e.sd.get('val'));
+           });
+
+         });
+
+        
+         r.addMutation('utils/always',(e){
+           e.meta('desc','mutatates a single value  from a inport and always sends it to all connected  and connecting outports');
+
+           e.makeInport('io:val');
+           e.makeOutport('io:call');
+
+           e.port('io:call').pause();
+
+           e.tap('io:val',(n){
+              e.sd.update('val',n);
+              e.port('io:call').resume();
+           });
+
+           e.port('io:call').whenSocketSubscribe((n){
+              if(e.port('io:call').isResumed) e.send('io:call').send(e.sd.get('val'));
+           });
+
+         });
+
          r.addMutation('utils/utf8.decode',(e){
            e.makeInport('io:in');
-           e.makeInport('io:out');
+           e.makeOutport('io:out');
 
            e.tapData('io:in',(n){
               var l = n.data is List ? n.data : [n.data];
@@ -25,11 +64,10 @@ class SparkUtils{
 
          r.addMutation('utils/utf8.encode',(e){
            e.makeInport('io:in');
-           e.makeInport('io:out');
+           e.makeOutport('io:out');
 
            e.tapData('io:in',(n){
-              var l = n.data is List ? n.data : [n.data];
-              e.send('io:out',UTF8.encode(l));
+              e.send('io:out',UTF8.encode(n.data));
            });
 
            e.tapEnd('io:in',(n){
@@ -39,7 +77,7 @@ class SparkUtils{
 
          r.addMutation('utils/repeat',(e){
            e.makeInport('io:in');
-           e.makeInport('io:out');
+           e.makeOutport('io:out');
            e.loopPort('io:in','io:out');
          });
 
